@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const express = require('express');
 
 const speakersRoute = require('./speakers');
@@ -6,8 +7,12 @@ const feedbackRoute = require('./feedback');
 const router = express.Router();
 
 module.exports = (params) => {
-  router.get('/', (req, res) => {
-    res.render('layout', { pageTitle: 'Welcome', template: 'index' });
+  const speakersService = params;
+
+  router.get('/', async (req, res) => {
+    const topSpeakers = await speakersService.getList();
+
+    res.render('layout', { pageTitle: 'Welcome', template: 'index', topSpeakers });
   });
 
   router.use('./speakers', speakersRoute(params));
