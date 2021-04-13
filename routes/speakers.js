@@ -1,18 +1,19 @@
+/* eslint-disable arrow-body-style */
+
 const express = require('express');
 
 const router = express.Router();
 
-module.exports = (params) => {
-  const speakersService = params;
+module.exports = params => {
+  const { speakersService } = params;
 
-  router.get('/', async (req, res) => {
+  router.get('/', async (request, response) => {
     const speakers = await speakersService.getList();
-    return res.json(speakers);
+    return response.json(speakers);
   });
 
-  // eslint-disable-next-line arrow-body-style
-  router.get('/:shortname', (req, res) => {
-    return res.send(`detail page of ${req.params.shortname}`);
+  router.get('/:shortname', (request, response) => {
+    return response.send(`Detail page of ${request.params.shortname}`);
   });
 
   return router;

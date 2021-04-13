@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const express = require('express');
 
 const speakersRoute = require('./speakers');
@@ -6,16 +5,18 @@ const feedbackRoute = require('./feedback');
 
 const router = express.Router();
 
-module.exports = (params) => {
-  const speakersService = params;
+module.exports = params => {
+  const { speakersService } = params;
 
-  router.get('/', async (req, res) => {
+  router.get('/', async (request, response) => {
     const topSpeakers = await speakersService.getList();
-
-    res.render('layout', { pageTitle: 'Welcome', template: 'index', topSpeakers });
+    // eslint-disable-next-line no-console
+    console.log(topSpeakers);
+    response.render('layout', { pageTitle: 'Welcome', template: 'index', topSpeakers });
   });
 
-  router.use('./speakers', speakersRoute(params));
-  router.use('./feedback', feedbackRoute(params));
+  router.use('/speakers', speakersRoute(params));
+  router.use('/feedback', feedbackRoute(params));
+
   return router;
 };

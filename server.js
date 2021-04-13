@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const express = require('express');
 const path = require('path');
 const cookieSession = require('cookie-session');
@@ -12,32 +11,31 @@ const speakersService = new SpeakersService('./data/speakers.json');
 const routes = require('./routes');
 
 const app = express();
-const port = 5000;
+
+app.locals.siteName = 'ROUX Academy';
+
+const port = 3000;
 
 app.set('trust proxy', 1);
 
 app.use(
   cookieSession({
     name: 'session',
-    keys: ['Goishsoodhd', 'hdjiehkjdbuwq'],
+    keys: ['Ghdur687399s7w', 'hhjjdf89s866799'],
   })
 );
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views'));
 
-app.locals.siteName = 'ROUX MEETUPS';
+app.locals.siteName = 'ROUX Meetups';
 
 app.use(express.static(path.join(__dirname, './static')));
 
-app.use(async (req, res, next) => {
-  try {
-    const names = await speakersService.getNames();
-    res.locals.speakersNames = names;
-
-    return next();
-  } catch (error) {
-    return next();
-  }
+app.use(async (request, response, next) => {
+  const names = await speakersService.getNames();
+  response.locals.speakerNames = names;
+  return next();
 });
 
 app.use(
@@ -48,5 +46,7 @@ app.use(
   })
 );
 
-app.use('/', routes());
-app.listen(port, () => console.log(`server listening on port ${port}`));
+app.listen(port, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Express server listening on port ${port}!`);
+});
